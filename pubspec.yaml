@@ -1,8 +1,8 @@
 name: flutter_yidun_captcha
-description: A new flutter plugin project.
+description: 适用于 Flutter 的网易易盾行为式验证码插件
 version: 0.0.1
-author:
-homepage:
+author: LiJianying <lijy91@foxmail.com>
+homepage: https://github.com/learn-flutter-dev/flutter_yidun_captcha
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -31,8 +31,6 @@ flutter:
         package: dev.learn_flutter.plugins.flutter_yidun_captcha
         pluginClass: FlutterYidunCaptchaPlugin
       ios:
-        pluginClass: FlutterYidunCaptchaPlugin
-      macos:
         pluginClass: FlutterYidunCaptchaPlugin
 
   # To add assets to your plugin package, add an assets section, like this:

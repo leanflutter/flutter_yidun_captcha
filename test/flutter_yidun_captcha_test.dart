@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await FlutterYidunCaptcha.platformVersion, '42');
+    expect(await YidunCaptcha.sdkVersion, '42');
   });
 }
