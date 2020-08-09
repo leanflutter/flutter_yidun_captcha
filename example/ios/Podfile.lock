@@ -1,0 +1,29 @@
+PODS:
+  - Flutter (1.0.0)
+  - flutter_yidun_captcha (0.0.1):
+    - Flutter
+    - NTESVerifyCode (~> 3.2.5)
+  - NTESVerifyCode (3.2.5)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_yidun_captcha (from `.symlinks/plugins/flutter_yidun_captcha/ios`)
+
+SPEC REPOS:
+  trunk:
+    - NTESVerifyCode
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_yidun_captcha:
+    :path: ".symlinks/plugins/flutter_yidun_captcha/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_yidun_captcha: bff9640c73d1ccead2f76152590c49df8046be7e
+  NTESVerifyCode: 02be4840bbb1292639a3df6747a26a7dbaab436a
+
+PODFILE CHECKSUM: f32fb4e7c14f8b3ca19a369d7be425dd9241af27
+
+COCOAPODS: 1.9.1
