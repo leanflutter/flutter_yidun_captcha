@@ -57,11 +57,12 @@
                     result:(FlutterResult)result
 {
     NSString *captchaId = call.arguments[@"captchaId"];
+    NSNumber *timeout = call.arguments[@"timeout"];
     
     self.manager = [NTESVerifyCodeManager getInstance];
     self.manager.delegate = self;
     
-    [self.manager configureVerifyCode:captchaId timeout:7.0];
+    [self.manager configureVerifyCode:captchaId timeout:[timeout intValue]];
     self.manager.mode = NTESVerifyCodeNormal;
     self.manager.lang = NTESVerifyCodeLangCN;
     self.manager.alpha = 0.6;
@@ -87,35 +88,23 @@
 }
 
 #pragma mark - NTESVerifyCodeManagerDelegate
-/**
- * 验证码组件初始化完成
- */
 - (void)verifyCodeInitFinish{
-    NSLog(@"收到初始化完成的回调");
     [self sendEventData:@"onReady" data:nil];
 }
 
-/**
- * 验证码组件初始化出错
- *
- * @param message 错误信息
- */
-- (void)verifyCodeInitFailed:(NSString *)message{
-    NSLog(@"收到初始化失败的回调:%@",message);
-    [self sendEventData:@"onError" data:nil];
+- (void)verifyCodeInitFailed:(NSArray *)error {
+    NSString *jsonString = [error firstObject];
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSError *err;
+    NSDictionary<NSString *, id> *data = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                         options:NSJSONReadingMutableContainers
+                                                                           error:&err];
+
+    [self sendEventData:@"onError" data:data];
 }
 
-/**
- * 完成验证之后的回调
- *
- * @param result 验证结果 BOOL:YES/NO
- * @param validate 二次校验数据，如果验证结果为false，validate返回空
- * @param message 结果描述信息
- *
- */
 - (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *)validate message:(NSString *)message{
-    NSLog(@"收到验证结果的回调:(%d,%@,%@)", result, validate, message);
-    
     NSDictionary<NSString *, id> *data = @{
         @"result": result ? @"true" : @"false",
         @"validate": validate,
@@ -125,28 +114,20 @@
     [self sendEventData:@"onValidate" data:data];
 }
 
-/**
- * 关闭验证码窗口后的回调
- */
-- (void)verifyCodeCloseWindow{
-    //用户关闭验证后执行的方法
-    NSLog(@"收到关闭验证码视图的回调");
-    [self sendEventData:@"onClose" data:nil];
-}
-
-/**
- * 网络错误
- *
- * @param error 网络错误信息
- */
-- (void)verifyCodeNetError:(NSError *)error{
-    //用户关闭验证后执行的方法
-    NSLog(@"收到网络错误的回调:%@(%ld)", [error localizedDescription], (long)error.code);
+- (void)verifyCodeCloseWindow:(NTESVerifyCodeClose)closeType {
+    NSString *closeTypeString = @"UNDEFINE_CLOSE";
+    switch (closeType) {
+        case NTESVerifyCodeCloseManual:
+            closeTypeString= @"USER_CLOSE";
+            break;
+        case NTESVerifyCodeCloseAuto:
+            closeTypeString =@"VERIFY_SUCCESS_CLOSE";
+            break;
+    }
     NSDictionary<NSString *, id> *data = @{
-        @"code": @(error.code),
-        @"message": [error localizedDescription],
+        @"closeType": closeTypeString,
     };
-    [self sendEventData:@"onError" data:data];
+    [self sendEventData:@"onClose" data:data];
 }
 
 @end

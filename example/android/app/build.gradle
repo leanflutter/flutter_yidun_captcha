@@ -33,7 +33,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "dev.learn_flutter.plugins.flutter_yidun_captcha_example"
+        applicationId "org.leanflutter.plugins.flutter_yidun_captcha_example"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
@@ -54,5 +54,5 @@ flutter {
 }
 
 dependencies {
-    implementation (name: 'captcha-release_v3.1.7', ext: 'aar')
+    implementation (name: 'captcha-release_v3.2.0', ext: 'aar')
 }

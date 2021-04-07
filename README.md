@@ -24,7 +24,7 @@
 ## 屏幕截图
 
 <div>
-  <img src='./screenshots/flutter_yidun_captcha-android.jpeg' width=280>
+  <img src='./screenshots/flutter_yidun_captcha-android.png' width=280>
   <img src='./screenshots/flutter_yidun_captcha-ios.png' width=280>
 </div>
 
@@ -84,14 +84,11 @@ await YidunCaptcha.verify(
   onValidate: (dynamic data) {
     _addLog('onValidate', data);
   },
+  onClose: (dynamic data) {
+    _addLog('onClose', data);
+  },
   onError: (dynamic data) {
     _addLog('onError', data);
-  },
-  onCancel: () {
-    _addLog('onCancel', null);
-  },
-  onClose: () {
-    _addLog('onClose', null);
   },
 );
 ```

@@ -1,4 +1,4 @@
-package dev.learn_flutter.plugins.flutter_yidun_captcha;
+package org.leanflutter.plugins.flutter_yidun_captcha;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -135,7 +135,7 @@ public class FlutterYidunCaptchaPlugin implements FlutterPlugin, MethodCallHandl
     }
 
     private void handleMethodGetSDKVersion(@NonNull MethodCall call, @NonNull Result result) {
-        result.success("0.0.0");
+        result.success("3.2.0");
     }
 
     private void handleMethodVerify(@NonNull MethodCall call, @NonNull final Result result) {
@@ -166,13 +166,15 @@ public class FlutterYidunCaptchaPlugin implements FlutterPlugin, MethodCallHandl
             }
 
             @Override
-            public void onCancel() {
-                sendEventData("onCancel", null);
-            }
-
-            @Override
-            public void onClose() {
-                sendEventData("onClose", null);
+            public void onClose(Captcha.CloseType closeType) {
+                String[] closeTypes = new String[]{
+                        "UNDEFINE_CLOSE",
+                        "USER_CLOSE",
+                        "VERIFY_SUCCESS_CLOSE"
+                };
+                final Map<String, Object> data = new HashMap<>();
+                data.put("closeType", closeTypes[closeType.ordinal()]);
+                sendEventData("onClose", data);
             }
         });
 
@@ -207,31 +209,5 @@ public class FlutterYidunCaptchaPlugin implements FlutterPlugin, MethodCallHandl
             }
         };
         handler.post(runnable);
-    }
-
-    private static Map<String, Object> convertMsgToMap(String jsonString) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(jsonString);
-            map = toMap(jsonObject);
-        } catch (JSONException ex) {
-            // skip;
-        }
-        return map;
-    }
-
-    private static Map<String, Object> toMap(JSONObject jsonObject) throws JSONException {
-        Map<String, Object> map = new HashMap<String, Object>();
-        Iterator<String> keys = jsonObject.keys();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            Object value = jsonObject.get(key);
-            if (value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
-            }
-            map.put(key, value);
-        }
-        return map;
     }
 }

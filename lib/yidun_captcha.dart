@@ -15,9 +15,8 @@ class YidunCaptcha {
 
   static Function() _verifyOnReady;
   static Function(dynamic) _verifyOnValidate;
+  static Function(dynamic) _verifyOnClose;
   static Function(dynamic) _verifyOnError;
-  static Function() _verifyOnCancel;
-  static Function() _verifyOnClose;
 
   static Future<String> get sdkVersion async {
     final String sdkVersion =
@@ -29,9 +28,8 @@ class YidunCaptcha {
     YidunCaptchaConfig config,
     Function() onReady,
     Function(dynamic data) onValidate,
+    Function(dynamic data) onClose,
     Function(dynamic data) onError,
-    Function() onCancel,
-    Function() onClose,
   }) async {
     if (_eventChannelReadied != true) {
       _eventChannel.receiveBroadcastStream().listen(_handleVerifyOnEvent);
@@ -41,6 +39,7 @@ class YidunCaptcha {
     _verifyOnReady = onReady;
     _verifyOnValidate = onValidate;
     _verifyOnClose = onClose;
+    _verifyOnError = onError;
 
     return await _methodChannel.invokeMethod('verify', config?.toJson());
   }
@@ -55,14 +54,11 @@ class YidunCaptcha {
       case 'onValidate':
         if (_verifyOnValidate != null) _verifyOnValidate(event['data']);
         break;
+      case 'onClose':
+        if (_verifyOnClose != null) _verifyOnClose(event['data']);
+        break;
       case 'onError':
         if (_verifyOnError != null) _verifyOnError(event['data']);
-        break;
-      case 'onCancel':
-        if (_verifyOnCancel != null) _verifyOnCancel();
-        break;
-      case 'onClose':
-        if (_verifyOnClose != null) _verifyOnClose();
         break;
     }
   }

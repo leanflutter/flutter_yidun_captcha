@@ -65,14 +65,11 @@ class _MyAppState extends State<MyApp> {
       onValidate: (dynamic data) {
         _addLog('onValidate', data);
       },
+      onClose: (dynamic data) {
+        _addLog('onClose', data);
+      },
       onError: (dynamic data) {
         _addLog('onError', data);
-      },
-      onCancel: () {
-        _addLog('onCancel', null);
-      },
-      onClose: () {
-        _addLog('onClose', null);
       },
     );
   }
