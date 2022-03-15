@@ -13,10 +13,10 @@ class YidunCaptcha {
 
   static bool _eventChannelReadied = false;
 
-  static Function() _verifyOnReady;
-  static Function(dynamic) _verifyOnValidate;
-  static Function(dynamic) _verifyOnClose;
-  static Function(dynamic) _verifyOnError;
+  static Function()? _verifyOnReady;
+  static Function(dynamic)? _verifyOnValidate;
+  static Function(dynamic)? _verifyOnClose;
+  static Function(dynamic)? _verifyOnError;
 
   static Future<String> get sdkVersion async {
     final String sdkVersion =
@@ -25,11 +25,11 @@ class YidunCaptcha {
   }
 
   static Future<bool> verify({
-    YidunCaptchaConfig config,
-    Function() onReady,
-    Function(dynamic data) onValidate,
-    Function(dynamic data) onClose,
-    Function(dynamic data) onError,
+    required YidunCaptchaConfig config,
+    Function()? onReady,
+    Function(dynamic data)? onValidate,
+    Function(dynamic data)? onClose,
+    Function(dynamic data)? onError,
   }) async {
     if (_eventChannelReadied != true) {
       _eventChannel.receiveBroadcastStream().listen(_handleVerifyOnEvent);
@@ -41,24 +41,25 @@ class YidunCaptcha {
     _verifyOnClose = onClose;
     _verifyOnError = onError;
 
-    return await _methodChannel.invokeMethod('verify', config?.toJson());
+    return await _methodChannel.invokeMethod('verify', config.toJson());
   }
 
   static _handleVerifyOnEvent(dynamic event) {
     String method = '${event['method']}';
+    dynamic data = event['data'];
 
     switch (method) {
       case 'onReady':
-        if (_verifyOnReady != null) _verifyOnReady();
+        if (_verifyOnReady != null) _verifyOnReady!();
         break;
       case 'onValidate':
-        if (_verifyOnValidate != null) _verifyOnValidate(event['data']);
+        if (_verifyOnValidate != null) _verifyOnValidate!(data);
         break;
       case 'onClose':
-        if (_verifyOnClose != null) _verifyOnClose(event['data']);
+        if (_verifyOnClose != null) _verifyOnClose!(data);
         break;
       case 'onError':
-        if (_verifyOnError != null) _verifyOnError(event['data']);
+        if (_verifyOnError != null) _verifyOnError!(data);
         break;
     }
   }
