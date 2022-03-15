@@ -1,3 +1,7 @@
+## 0.1.0
+
+- 依赖库升级到 3.3.6
+
 ## 0.0.1
 
-* initial release.
+* First release
